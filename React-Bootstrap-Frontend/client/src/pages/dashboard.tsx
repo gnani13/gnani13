@@ -109,7 +109,7 @@ export default function Dashboard() {
                 </button>
               </Link>
             </div>
-            <DonationMap donations={availableDonations || []} />
+            <DonationMap donations={Array.isArray(availableDonations) ? availableDonations : []} />
           </div>
         ) : (
           <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">

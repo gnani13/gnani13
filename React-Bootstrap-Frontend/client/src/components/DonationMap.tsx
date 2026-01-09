@@ -34,7 +34,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null;
+  if (!isMounted) return <div className="h-[400px] w-full bg-muted animate-pulse rounded-2xl" />;
 
   return (
     <div className="h-[400px] w-full rounded-2xl overflow-hidden border border-border shadow-sm">
@@ -48,7 +48,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {donations.map((donation) => (
+        {Array.isArray(donations) && donations.map((donation) => (
           <Marker 
             key={donation.id} 
             position={[20.5937 + (Math.random() - 0.5) * 2, 78.9629 + (Math.random() - 0.5) * 2]} 
