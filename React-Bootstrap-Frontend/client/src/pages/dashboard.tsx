@@ -42,14 +42,28 @@ export default function Dashboard() {
     </div>
   );
 
+  const donorFeatures = [
+    { title: "Active Donations", count: userStats?.donationsCount || 0, icon: Search, color: "bg-blue-100 text-blue-600" },
+    { title: "Total Impact", count: userStats?.impactScore || 0, icon: Heart, color: "bg-red-100 text-red-600" },
+  ];
+
+  const ngoFeatures = [
+    { title: "Claimed Items", count: userStats?.donationsCount || 0, icon: Truck, color: "bg-green-100 text-green-600" },
+    { title: "Beneficiaries Helped", count: (userStats?.impactScore || 0) * 2, icon: Heart, color: "bg-pink-100 text-pink-600" },
+  ];
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-display font-bold text-foreground">
-            {user?.role === 'DONOR' ? 'Donor Dashboard' : user?.role === 'NGO' ? 'NGO Dashboard' : user?.role === 'VOLUNTEER' ? 'Volunteer Dashboard' : 'Dashboard'}
+            {user?.role === 'DONOR' ? 'Donor Portal' : user?.role === 'NGO' ? 'NGO Distribution Hub' : user?.role === 'VOLUNTEER' ? 'Volunteer Dispatch' : 'Dashboard'}
           </h1>
-          <p className="text-muted-foreground">Welcome back, {user?.name}. Here's what's happening today.</p>
+          <p className="text-muted-foreground">
+            {user?.role === 'DONOR' ? 'Manage your contributions and track your impact.' : 
+             user?.role === 'NGO' ? 'Browse available food and coordinate distribution.' : 
+             'Track and complete your delivery assignments.'}
+          </p>
         </div>
         
         {user?.role === 'DONOR' && (
@@ -73,7 +87,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
-          title="Total Donations" 
+          title="Global Donations" 
           value={stats?.totalDonations || 0} 
           icon={Heart} 
           colorClass="bg-red-100 text-red-600" 
@@ -91,18 +105,70 @@ export default function Dashboard() {
           colorClass="bg-blue-100 text-blue-600" 
         />
         <StatCard 
-          title="My Impact" 
-          value={userStats?.impactScore || 0} 
+          title={user?.role === 'DONOR' ? "My Donations" : user?.role === 'NGO' ? "My Claims" : "My Impact"} 
+          value={userStats?.donationsCount || 0} 
           icon={Heart} 
           colorClass="bg-green-100 text-green-600" 
         />
       </div>
 
+      {user?.role === 'DONOR' && (
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-card p-6 rounded-2xl border border-border">
+            <h3 className="font-bold mb-4">Quick Stats</h3>
+            <div className="space-y-4">
+              {donorFeatures.map((f, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${f.color}`}><f.icon className="w-4 h-4" /></div>
+                    <span className="font-medium">{f.title}</span>
+                  </div>
+                  <span className="font-bold">{f.count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-primary/5 p-6 rounded-2xl border border-primary/10 flex flex-col justify-center">
+            <h3 className="font-bold text-primary mb-2">Ready to give?</h3>
+            <p className="text-sm text-muted-foreground mb-4">Every donation helps someone in need. Start a new listing now.</p>
+            <Link href="/donations/new">
+              <button className="btn-primary w-fit">Create Donation</button>
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {user?.role === 'NGO' && (
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-card p-6 rounded-2xl border border-border">
+            <h3 className="font-bold mb-4">Distribution Metrics</h3>
+            <div className="space-y-4">
+              {ngoFeatures.map((f, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${f.color}`}><f.icon className="w-4 h-4" /></div>
+                    <span className="font-medium">{f.title}</span>
+                  </div>
+                  <span className="font-bold">{f.count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-accent/5 p-6 rounded-2xl border border-accent/10 flex flex-col justify-center">
+            <h3 className="font-bold text-accent mb-2">Find more food</h3>
+            <p className="text-sm text-muted-foreground mb-4">New donations are added daily. Browse the map to find nearby items.</p>
+            <Link href="/donations/available">
+              <button className="btn-primary bg-accent hover:bg-accent/90 w-fit">Browse Available</button>
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="grid lg:grid-cols-2 gap-8">
-        {user?.role === 'VOLUNTEER' ? (
+        {user?.role === 'VOLUNTEER' && (
           <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-bold text-lg">Nearby Deliveries</h3>
+              <h3 className="font-bold text-lg text-primary">Nearby Deliveries</h3>
               <Link href="/donations/available">
                 <button className="text-sm text-primary font-medium hover:underline flex items-center gap-1">
                   View All <Search className="w-3 h-3" />
@@ -111,7 +177,9 @@ export default function Dashboard() {
             </div>
             <DonationMap donations={Array.isArray(availableDonations) ? availableDonations : []} />
           </div>
-        ) : (
+        )}
+
+        {(user?.role === 'DONOR' || user?.role === 'NGO') && (
           <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
             <h3 className="font-bold text-lg mb-6">Platform Impact</h3>
             <div className="h-[300px] w-full">

@@ -53,14 +53,14 @@ export function useCreateDonation() {
           ...donation, 
           status: 'AVAILABLE',
           donorId: 1,
-          createdAt: new Date().toISOString() 
-        } as Donation;
+          claimedByNgoId: null,
+          createdAt: new Date()
+        } as unknown as Donation;
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['donations'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/donations/available'] });
       toast({
         title: "Donation Created",
         description: "Thank you for your generosity! Your donation is now listed.",

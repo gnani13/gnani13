@@ -42,7 +42,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
         center={center} 
         zoom={zoom} 
         scrollWheelZoom={false}
-        style={{ height: '400px', width: '100%' }}
+        style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -57,7 +57,6 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
               <div className="p-2">
                 <h3 className="font-bold">{donation.title}</h3>
                 <p className="text-sm">{donation.pickupAddress}</p>
-                <p className="text-xs text-muted-foreground mt-1">Quantity: {donation.quantity}</p>
               </div>
             </Popup>
           </Marker>
