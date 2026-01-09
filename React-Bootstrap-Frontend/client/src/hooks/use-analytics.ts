@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/axios";
-import { type DashboardStats, type UserStats } from "@shared/schema";
+import { type DashboardStats, type UserStats } from "../../../shared/schema";
 
 export function useDashboardStats() {
   return useQuery({
@@ -9,6 +9,7 @@ export function useDashboardStats() {
       const res = await api.get<DashboardStats>('/api/analytics/dashboard');
       return res.data;
     },
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -19,5 +20,6 @@ export function useUserStats() {
       const res = await api.get<UserStats>('/api/analytics/user-stats');
       return res.data;
     },
+    refetchOnWindowFocus: true,
   });
 }

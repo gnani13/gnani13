@@ -58,9 +58,9 @@ export function useCreateDonation() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['donations', 'my'] });
-      queryClient.invalidateQueries({ queryKey: ['donations', 'available'] });
+      queryClient.invalidateQueries({ queryKey: ['donations'] });
       queryClient.invalidateQueries({ queryKey: ['analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/donations/available'] });
       toast({
         title: "Donation Created",
         description: "Thank you for your generosity! Your donation is now listed.",

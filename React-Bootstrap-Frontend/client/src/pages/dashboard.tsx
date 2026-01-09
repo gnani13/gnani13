@@ -31,7 +31,7 @@ export default function Dashboard() {
   ];
 
   const StatCard = ({ title, value, icon: Icon, colorClass }: any) => (
-    <div className="bg-card rounded-2xl p-6 border border-border shadow-sm flex items-center justify-between">
+    <div className="bg-card rounded-2xl p-6 border border-border shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
       <div>
         <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
         <h3 className="text-3xl font-display font-bold text-foreground">{value}</h3>

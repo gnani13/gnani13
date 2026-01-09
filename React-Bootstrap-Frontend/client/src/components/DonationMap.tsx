@@ -42,7 +42,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
         center={center} 
         zoom={zoom} 
         scrollWheelZoom={false}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '400px', width: '100%' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -51,7 +51,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
         {donations.map((donation) => (
           <Marker 
             key={donation.id} 
-            position={[20.5937 + (Math.random() - 0.5) * 2, 78.9629 + (Math.random() - 0.5) * 2]} // Mock coordinates
+            position={[20.5937 + (Math.random() - 0.5) * 2, 78.9629 + (Math.random() - 0.5) * 2]} 
           >
             <Popup>
               <div className="p-2">
