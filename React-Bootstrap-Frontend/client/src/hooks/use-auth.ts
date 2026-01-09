@@ -54,10 +54,12 @@ export function useAuth() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
+      console.log("Attempting login with:", credentials);
       const res = await api.post<AuthResponse>('/api/auth/login', credentials);
       return res.data;
     },
     onSuccess: (data) => {
+      console.log("Login success:", data);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       queryClient.setQueryData(['auth', 'user'], data.user);
@@ -78,10 +80,12 @@ export function useAuth() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: InsertUser) => {
+      console.log("Attempting register with:", data);
       const res = await api.post<AuthResponse>('/api/auth/register', data);
       return res.data;
     },
     onSuccess: (data) => {
+      console.log("Register success:", data);
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       queryClient.setQueryData(['auth', 'user'], data.user);

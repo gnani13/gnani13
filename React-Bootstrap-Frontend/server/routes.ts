@@ -23,35 +23,36 @@ export async function registerRoutes(
 
   app.post("/api/auth/register", async (req, res) => {
     try {
-      console.log("Register request body:", req.body);
-      // Ensure role is uppercase to match enum
-      if (req.body.role) req.body.role = req.body.role.toUpperCase();
-      console.log("Processing register data:", req.body);
-      const data = insertUserSchema.parse(req.body);
+      console.log("Raw Register request body:", req.body);
+      const payload = { ...req.body };
+      if (payload.role) payload.role = payload.role.toUpperCase();
+      console.log("Processed Register payload:", payload);
+      
+      const data = insertUserSchema.parse(payload);
       const existing = await storage.getUserByUsername(data.email);
       if (existing) return res.status(400).json({ message: "User exists" });
       const user = await storage.createUser(data);
       (req.session as any).userId = user.id;
       res.json({ token: "fake-jwt-token", user });
     } catch (e: any) {
-      console.error("Register validation error:", JSON.stringify(e, null, 2));
-      res.status(400).json({ message: "Invalid data", errors: e.errors || e.message });
+      console.error("Register validation error details:", JSON.stringify(e, null, 2));
+      res.status(400).json({ message: "Invalid registration data", details: e.errors || e.message });
     }
   });
 
   app.post("/api/auth/login", async (req, res) => {
     try {
-      console.log("Login request body:", req.body);
+      console.log("Raw Login request body:", req.body);
       const data = loginCredentialsSchema.parse(req.body);
       const user = await storage.getUserByUsername(data.email);
       if (!user || user.password !== data.password) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(401).json({ message: "Invalid email or password" });
       }
       (req.session as any).userId = user.id;
       res.json({ token: "fake-jwt-token", user });
     } catch (e: any) {
-      console.error("Login validation error:", JSON.stringify(e, null, 2));
-      res.status(400).json({ message: "Invalid data", errors: e.errors || e.message });
+      console.error("Login validation error details:", JSON.stringify(e, null, 2));
+      res.status(400).json({ message: "Invalid login credentials format", details: e.errors || e.message });
     }
   });
 
