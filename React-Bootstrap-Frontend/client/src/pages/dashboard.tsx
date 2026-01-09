@@ -46,7 +46,9 @@ export default function Dashboard() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold text-foreground">Dashboard</h1>
+          <h1 className="text-3xl font-display font-bold text-foreground">
+            {user?.role === 'DONOR' ? 'Donor Dashboard' : user?.role === 'NGO' ? 'NGO Dashboard' : user?.role === 'VOLUNTEER' ? 'Volunteer Dashboard' : 'Dashboard'}
+          </h1>
           <p className="text-muted-foreground">Welcome back, {user?.name}. Here's what's happening today.</p>
         </div>
         
@@ -146,7 +148,9 @@ export default function Dashboard() {
             <div className="flex gap-8">
               <div>
                 <span className="block text-4xl font-bold">{userStats?.donationsCount || 0}</span>
-                <span className="text-sm opacity-70">Contributions</span>
+                <span className="text-sm opacity-70">
+                  {user?.role === 'DONOR' ? 'Donations' : user?.role === 'NGO' ? 'Claims' : 'Deliveries'}
+                </span>
               </div>
               <div>
                 <span className="block text-4xl font-bold">{userStats?.impactScore || 0}</span>

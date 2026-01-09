@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Donation } from "../../../shared/schema";
+import { useEffect, useState } from 'react';
 
 // Fix for default marker icons in Leaflet
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -27,6 +28,14 @@ interface DonationMapProps {
 }
 
 export default function DonationMap({ donations, center = [20.5937, 78.9629], zoom = 5 }: DonationMapProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   return (
     <div className="h-[400px] w-full rounded-2xl overflow-hidden border border-border shadow-sm">
       <MapContainer 
@@ -42,7 +51,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
         {donations.map((donation) => (
           <Marker 
             key={donation.id} 
-            position={[20.5937 + (Math.random() - 0.5) * 2, 78.9629 + (Math.random() - 0.5) * 2]} // Mock coordinates since schema only has address
+            position={[20.5937 + (Math.random() - 0.5) * 2, 78.9629 + (Math.random() - 0.5) * 2]} // Mock coordinates
           >
             <Popup>
               <div className="p-2">

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/axios";
-import { type Donation, type InsertDonation } from "@shared/schema";
+import { type Donation, type InsertDonation } from "../../../shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 // === QUERY HOOKS ===
@@ -59,7 +59,8 @@ export function useCreateDonation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['donations', 'my'] });
-      queryClient.invalidateQueries({ queryKey: ['analytics', 'user-stats'] });
+      queryClient.invalidateQueries({ queryKey: ['donations', 'available'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics'] });
       toast({
         title: "Donation Created",
         description: "Thank you for your generosity! Your donation is now listed.",
