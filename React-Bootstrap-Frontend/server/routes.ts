@@ -21,22 +21,27 @@ export async function registerRoutes(
     secret: process.env.SESSION_SECRET || 'dev-secret'
   }));
 
-  // Auth Routes
   app.post("/api/auth/register", async (req, res) => {
     try {
+      console.log("Register request body:", req.body);
+      // Ensure role is uppercase to match enum
+      if (req.body.role) req.body.role = req.body.role.toUpperCase();
+      console.log("Processing register data:", req.body);
       const data = insertUserSchema.parse(req.body);
       const existing = await storage.getUserByUsername(data.email);
       if (existing) return res.status(400).json({ message: "User exists" });
       const user = await storage.createUser(data);
       (req.session as any).userId = user.id;
       res.json({ token: "fake-jwt-token", user });
-    } catch (e) {
-      res.status(400).json({ message: "Invalid data" });
+    } catch (e: any) {
+      console.error("Register validation error:", JSON.stringify(e, null, 2));
+      res.status(400).json({ message: "Invalid data", errors: e.errors || e.message });
     }
   });
 
   app.post("/api/auth/login", async (req, res) => {
     try {
+      console.log("Login request body:", req.body);
       const data = loginCredentialsSchema.parse(req.body);
       const user = await storage.getUserByUsername(data.email);
       if (!user || user.password !== data.password) {
@@ -44,8 +49,9 @@ export async function registerRoutes(
       }
       (req.session as any).userId = user.id;
       res.json({ token: "fake-jwt-token", user });
-    } catch (e) {
-      res.status(400).json({ message: "Invalid data" });
+    } catch (e: any) {
+      console.error("Login validation error:", JSON.stringify(e, null, 2));
+      res.status(400).json({ message: "Invalid data", errors: e.errors || e.message });
     }
   });
 

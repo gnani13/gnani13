@@ -24,6 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error("API Error Response:", error.response?.status, error.response?.data);
     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       // Clear token and redirect to login if not already there
       localStorage.removeItem('token');

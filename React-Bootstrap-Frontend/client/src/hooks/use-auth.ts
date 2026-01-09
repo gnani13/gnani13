@@ -62,6 +62,17 @@ export function useAuth() {
       localStorage.setItem('user', JSON.stringify(data.user));
       queryClient.setQueryData(['auth', 'user'], data.user);
       setLocation('/dashboard');
+      toast({
+        title: "Welcome back!",
+        description: "Successfully logged in.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Login failed",
+        description: error.response?.data?.message || "Invalid credentials",
+        variant: "destructive",
+      });
     }
   });
 
@@ -75,6 +86,17 @@ export function useAuth() {
       localStorage.setItem('user', JSON.stringify(data.user));
       queryClient.setQueryData(['auth', 'user'], data.user);
       setLocation('/dashboard');
+      toast({
+        title: "Account created!",
+        description: "Welcome to ReNourish.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Registration failed",
+        description: error.response?.data?.message || "Could not create account",
+        variant: "destructive",
+      });
     }
   });
 

@@ -10,7 +10,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   name: text("name").notNull(),
-  role: text("role", { enum: ["DONOR", "NGO", "VOLUNTEER", "ADMIN"] }).notNull(),
+  role: text("role").notNull(),
 });
 
 export const donations = pgTable("donations", {
