@@ -9,7 +9,7 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-let DefaultIcon = L.icon({
+const DefaultIcon = L.icon({
     iconUrl: markerIcon,
     iconRetinaUrl: markerIcon2x,
     shadowUrl: markerShadow,
@@ -42,7 +42,7 @@ export default function DonationMap({ donations, center = [20.5937, 78.9629], zo
         center={center} 
         zoom={zoom} 
         scrollWheelZoom={false}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '400px', width: '100%' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
