@@ -175,7 +175,9 @@ export default function Dashboard() {
                 </button>
               </Link>
             </div>
-            <DonationMap donations={Array.isArray(availableDonations) ? availableDonations : []} />
+            <div className="h-[400px] w-full rounded-2xl overflow-hidden bg-muted flex items-center justify-center">
+              <p className="text-muted-foreground">Map view is currently under maintenance.</p>
+            </div>
           </div>
         )}
 
