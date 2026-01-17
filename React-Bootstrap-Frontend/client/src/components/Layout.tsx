@@ -62,6 +62,10 @@ export function Layout({ children }: { children: ReactNode }) {
           {user.role === 'VOLUNTEER' && (
             <NavItem href="/assignments" icon={Truck} label="My Assignments" />
           )}
+
+          {user.role === 'ADMIN' && (
+            <NavItem href="/admin" icon={List} label="Admin Panel" />
+          )}
         </nav>
 
         <div className="pt-6 border-t border-border mt-auto">

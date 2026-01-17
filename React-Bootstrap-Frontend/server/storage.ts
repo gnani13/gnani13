@@ -24,6 +24,10 @@ export interface IStorage {
   // Analytics
   getDashboardStats(): Promise<{ totalDonations: number; activeDonations: number; totalMealsSaved: number }>;
   getUserStats(userId: number): Promise<{ donationsCount: number; impactScore: number }>;
+
+  // Admin
+  getAllDonations(): Promise<Donation[]>;
+  cancelDonation(id: number): Promise<Donation | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -120,6 +124,22 @@ export class DatabaseStorage implements IStorage {
       donationsCount: userDonations.length,
       impactScore: userDonations.length * 10
     };
+  }
+
+  async getAllDonations(): Promise<Donation[]> {
+    return await db.select().from(donations);
+  }
+
+  async cancelDonation(id: number): Promise<Donation | undefined> {
+    const [updated] = await db.update(donations)
+      .set({ status: "AVAILABLE", claimedByNgoId: null })
+      .where(eq(donations.id, id))
+      .returning();
+    
+    // Also delete any assignment
+    await db.delete(assignments).where(eq(assignments.donationId, id));
+    
+    return updated;
   }
 }
 

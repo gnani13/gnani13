@@ -12,6 +12,7 @@ import MyDonations from "@/pages/my-donations";
 import AvailableDonations from "@/pages/available-donations";
 import NgoClaimedDonations from "@/pages/ngo-claimed";
 import MyAssignments from "@/pages/assignments";
+import AdminDashboard from "@/pages/admin-dashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -61,6 +62,13 @@ function Router() {
         <Route path="/assignments">
           <ProtectedRoute allowedRoles={['VOLUNTEER']}>
             <MyAssignments />
+          </ProtectedRoute>
+        </Route>
+
+        {/* ADMIN Routes */}
+        <Route path="/admin">
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <AdminDashboard />
           </ProtectedRoute>
         </Route>
 

@@ -141,5 +141,26 @@ export async function registerRoutes(
     res.json(updated);
   });
 
+  // Admin Routes
+  app.get("/api/admin/donations", async (req, res) => {
+    const userId = (req.session as any).userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const user = await storage.getUser(userId);
+    if (!user || user.role !== 'ADMIN') return res.status(403).json({ message: "Forbidden" });
+    
+    const list = await storage.getAllDonations();
+    res.json(list);
+  });
+
+  app.post("/api/admin/donations/:id/cancel", async (req, res) => {
+    const userId = (req.session as any).userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const user = await storage.getUser(userId);
+    if (!user || user.role !== 'ADMIN') return res.status(403).json({ message: "Forbidden" });
+    
+    const updated = await storage.cancelDonation(Number(req.params.id));
+    res.json(updated);
+  });
+
   return httpServer;
 }
