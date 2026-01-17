@@ -13,6 +13,8 @@ const createSchema = insertDonationSchema.omit({
   donorId: true, 
   claimedByNgoId: true, 
   status: true 
+}).extend({
+  pickupDate: z.string().min(1, "Pickup date is required"),
 });
 
 type CreateDonationForm = z.infer<typeof createSchema>;
@@ -73,16 +75,28 @@ export default function CreateDonation() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-foreground">Pickup Address</label>
+              <label className="text-sm font-semibold text-foreground">Pickup Date</label>
               <input
-                {...form.register("pickupAddress")}
-                placeholder="Full address for pickup"
+                {...form.register("pickupDate")}
+                type="date"
                 className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               />
-              {form.formState.errors.pickupAddress && (
-                <p className="text-xs text-destructive">{form.formState.errors.pickupAddress.message}</p>
+              {form.formState.errors.pickupDate && (
+                <p className="text-xs text-destructive">{form.formState.errors.pickupDate.message}</p>
               )}
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-foreground">Pickup Address</label>
+            <input
+              {...form.register("pickupAddress")}
+              placeholder="Full address for pickup"
+              className="w-full px-4 py-3 rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            />
+            {form.formState.errors.pickupAddress && (
+              <p className="text-xs text-destructive">{form.formState.errors.pickupAddress.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">

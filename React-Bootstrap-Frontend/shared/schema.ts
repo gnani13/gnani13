@@ -19,6 +19,7 @@ export const donations = pgTable("donations", {
   description: text("description").notNull(),
   quantity: text("quantity").notNull(),
   pickupAddress: text("pickup_address").notNull(),
+  pickupDate: text("pickup_date"),
   status: text("status", { enum: ["AVAILABLE", "CLAIMED", "DELIVERED"] }).default("AVAILABLE"),
   donorId: integer("donor_id").notNull(),
   claimedByNgoId: integer("claimed_by_ngo_id"),
