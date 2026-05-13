@@ -1,36 +1,34 @@
-import { pgTable, text, serial, integer, boolean, timestamp, varchar, date } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// We define these tables to generate TypeScript types that match your Spring Boot backend
-// The actual data storage is handled by your Spring Boot application
-
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   name: text("name").notNull(),
   role: text("role").notNull(),
 });
 
-export const donations = pgTable("donations", {
-  id: serial("id").primaryKey(),
+export const donations = sqliteTable("donations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   title: text("title").notNull(),
   description: text("description").notNull(),
   quantity: text("quantity").notNull(),
   pickupAddress: text("pickup_address").notNull(),
   pickupDate: text("pickup_date"),
-  status: text("status", { enum: ["AVAILABLE", "CLAIMED", "DELIVERED"] }).default("AVAILABLE"),
+  status: text("status").notNull().default("AVAILABLE"),
   donorId: integer("donor_id").notNull(),
   claimedByNgoId: integer("claimed_by_ngo_id"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: text("created_at"),
 });
 
-export const assignments = pgTable("assignments", {
-  id: serial("id").primaryKey(),
+export const assignments = sqliteTable("assignments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   volunteerId: integer("volunteer_id").notNull(),
   donationId: integer("donation_id").notNull(),
-  status: text("status", { enum: ["PENDING", "IN_PROGRESS", "COMPLETED"] }).default("PENDING"),
+  status: text("status").notNull().default("PENDING"),
 });
 
 // Schemas
